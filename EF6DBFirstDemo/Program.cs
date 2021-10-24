@@ -27,6 +27,7 @@ namespace EF6DBFirstDemo
             OptimisticConcurrency();
             TransactionSupport();
             SetEntityState();
+            EagerLoading();
 
             Console.ReadLine();
         }
@@ -469,6 +470,20 @@ namespace EF6DBFirstDemo
             }
 
             Console.WriteLine("*** OptimisticConcurrency Ends ***");
+        }
+
+        public static void EagerLoading()
+        {
+            Console.WriteLine();
+            Console.WriteLine("*** EagerLoading Starts ***");
+            using (var ctx = new SchoolDBEntities())
+            {
+                ctx.Database.Log = Console.Write;
+                var stud1 = ctx.Students.Include(s => s.Standard)
+                                .Where(s => s.StudentName == "Bill")
+                                .FirstOrDefault<Student>();
+            }
+            Console.WriteLine("*** EagerLoading Ends ***");
         }
     }
 }
